@@ -2970,6 +2970,52 @@ select {
   overflow: visible;
 }
 
+/* Feed structure only: keep every post readable and internally aligned. */
+.post-card {
+  gap: 18px;
+}
+
+.post-header-bar,
+.post-title-section,
+.post-body-text,
+.post-footer-bar {
+  width: 100%;
+  min-width: 0;
+}
+
+.post-origin-meta {
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.post-title-section h1,
+.post-title-section h2 {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.post-body-text img,
+.post-body-text video,
+.post-body-text iframe,
+.post-poster-grid-wrapper,
+.code-spec-snippet,
+.poll-container {
+  max-width: 100%;
+}
+
+.post-footer-bar {
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.post-footer-bar .vote-widget {
+  flex: 0 0 auto;
+}
+
+.post-footer-bar .post-action-btn {
+  flex: 0 0 auto;
+}
+
 .search-cursor {
   color: var(--accent-red);
   font-weight: 800;
@@ -3091,6 +3137,52 @@ body::after {
 .nav-item { background: var(--surface-1); border-color: var(--line-dark); }
 .nav-item.active { background: var(--neo-green); color: #000; border: 2px solid #000; box-shadow: 4px 4px 0 var(--neo-lime); }
 .nav-item.active .nav-edge::after { content: " █"; }
+.nav-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: 0 10px 0 0;
+  color: var(--neo-green);
+  font-size: 1.65rem;
+  font-weight: 1000;
+  line-height: 1;
+  text-shadow: 1px 0 var(--neo-cyan), -1px 0 var(--neo-magenta), 0 0 7px rgba(0, 255, 65, 0.7);
+}
+
+.nav-index { display: none; }
+
+.nav-icon::before,
+.nav-icon::after {
+  content: attr(data-icon);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.nav-icon::before { color: var(--neo-cyan); transform: translateX(-2px); }
+.nav-icon::after { color: var(--neo-magenta); transform: translateX(2px); }
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon { animation: nav-icon-jolt 220ms steps(2, end); }
+.nav-item:hover .nav-icon::before,
+.nav-item:hover .nav-icon::after,
+.nav-item.active .nav-icon::before,
+.nav-item.active .nav-icon::after { opacity: 0.8; animation: nav-icon-split 220ms steps(2, end); }
+
+@keyframes nav-icon-jolt {
+  0%, 100% { transform: translateX(0); }
+  40% { transform: translateX(2px) skewX(-8deg); }
+  70% { transform: translateX(-1px); }
+}
+
+@keyframes nav-icon-split {
+  0%, 100% { opacity: 0; }
+  35%, 70% { opacity: 0.8; }
+}
 .community-row { background: var(--surface-2); border-color: var(--line-dark); }
 .community-row.active-community { border: 2px solid var(--neo-green); box-shadow: 4px 4px 0 var(--neo-green); }
 .sidebar-terminal-box { background: var(--surface-1); border: 2px solid var(--neo-cyan); box-shadow: 5px 5px 0 var(--neo-cyan); }

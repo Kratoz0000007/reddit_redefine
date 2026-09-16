@@ -4,6 +4,34 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const STORAGE_KEY = 'reddit-redefine-state-v1';
+  const defaultState = {
+    user: { username: 'brutalist_user', joined: ['r/graphic_design'], karma: 32400 },
+    votes: {},
+    saved: [],
+    posts: [],
+    comments: [],
+    pollVotes: {},
+    notifications: [],
+    history: []
+  };
+
+  function loadState() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      return stored ? { ...defaultState, ...stored, user: { ...defaultState.user, ...stored.user } } : JSON.parse(JSON.stringify(defaultState));
+    } catch {
+      return JSON.parse(JSON.stringify(defaultState));
+    }
+  }
+
+  const state = loadState();
+  const persist = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  const recordHistory = value => {
+    state.history = [value, ...state.history.filter(item => item !== value)].slice(0, 20);
+    persist();
+  };
+
   // --------------------------------------------------------------------------
   // 1. CYBER-BRUTALIST AUDIO SYNTHESIZER (WEB AUDIO API)
   // --------------------------------------------------------------------------
@@ -104,13 +132,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   // 3. VOTING SYSTEM
   // --------------------------------------------------------------------------
-  function setupVoteWidget(container, initialScore = 28700) {
+  function setupVoteWidget(container, initialScore = 28700, postId = 'featured-post') {
     const upBtn = container.querySelector('.upvote, .comm-vote-btn:first-child');
     const downBtn = container.querySelector('.downvote, .comm-vote-btn:last-child');
     const scoreDisplay = container.querySelector('.vote-score, .comm-pts');
-    
-    let currentScore = initialScore;
-    let userVote = 0; // 0 = none, 1 = upvoted, -1 = downvoted
+
+    let currentScore = state.votes[postId]?.score || initialScore;
+    let userVote = state.votes[postId]?.value || 0;
+
+    if (userVote === 1) upBtn?.classList.add('active');
+    if (userVote === -1) downBtn?.classList.add('active');
+    scoreDisplay?.classList.toggle('score-up', userVote === 1);
+    scoreDisplay?.classList.toggle('score-down', userVote === -1);
 
     function formatScore(score) {
       if (score >= 1000) {
@@ -143,6 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scoreDisplay) {
           scoreDisplay.textContent = formatScore(currentScore);
         }
+        state.votes[postId] = { value: userVote, score: currentScore };
+        persist();
       });
     }
 
@@ -170,6 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scoreDisplay) {
           scoreDisplay.textContent = formatScore(currentScore);
         }
+        state.votes[postId] = { value: userVote, score: currentScore };
+        persist();
       });
     }
   }
@@ -177,12 +214,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize main post voting
   const mainVoteWidget = document.getElementById('vote-widget-main');
   if (mainVoteWidget) {
-    setupVoteWidget(mainVoteWidget, 28700);
+    setupVoteWidget(mainVoteWidget, 28700, 'featured-post');
   }
 
   // Secondary posts voting
   document.querySelectorAll('.secondary-post .vote-widget').forEach((widget, index) => {
-    setupVoteWidget(widget, index === 0 ? 9400 : 3100);
+    setupVoteWidget(widget, index === 0 ? 9400 : 3100, `secondary-${index}`);
   });
 
   // --------------------------------------------------------------------------
@@ -269,11 +306,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   const joinBtn = document.getElementById('join-community-btn');
   const joinStatusText = document.getElementById('join-status-text');
-  let isJoined = false;
+  let isJoined = state.user.joined.includes('r/graphic_design');
+
+  function renderJoinState() {
+    if (!joinBtn || !joinStatusText) return;
+    joinBtn.classList.toggle('btn-primary', !isJoined);
+    joinBtn.classList.toggle('btn-secondary', isJoined);
+    joinStatusText.textContent = isJoined ? 'LEAVE COMMUNITY [JOINED]' : 'JOIN COMMUNITY';
+  }
+
+  renderJoinState();
 
   if (joinBtn && joinStatusText) {
     joinBtn.addEventListener('click', () => {
       isJoined = !isJoined;
+      state.user.joined = isJoined
+        ? [...new Set([...state.user.joined, 'r/graphic_design'])]
+        : state.user.joined.filter(name => name !== 'r/graphic_design');
+      persist();
       if (isJoined) {
         joinBtn.classList.remove('btn-primary');
         joinBtn.classList.add('btn-secondary');
@@ -363,7 +413,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       commentsStream.insertBefore(newCard, commentsStream.firstChild);
       commentTextarea.value = '';
-      setupVoteWidget(newCard, 1);
+      const commentId = `comment-${Date.now()}`;
+      newCard.dataset.commentId = commentId;
+      state.comments.unshift({ id: commentId, postId: 'featured-post', author: state.user.username, content, createdAt: new Date().toISOString(), score: 1 });
+      persist();
+      setupVoteWidget(newCard, 1, commentId);
       showToast('COMMENT_POSTED: Analysis broadcast to r/graphic_design');
       playSuccess();
     });
@@ -377,6 +431,34 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
+
+  function restorePersistedComments() {
+    if (!commentsStream) return;
+    state.comments.slice().reverse().forEach(comment => {
+      const card = document.createElement('div');
+      card.className = 'comment-card level-0';
+      card.dataset.commentId = comment.id;
+      card.innerHTML = `
+        <div class="comment-meta">
+          <span class="comment-author">u/${escapeHtml(comment.author)}</span>
+          <span class="comment-time">${new Date(comment.createdAt).toLocaleString()}</span>
+          <span class="comment-score">+${comment.score} PTS</span>
+          <span class="badge-mod">[YOUR_TRANSMISSION]</span>
+        </div>
+        <div class="comment-text"><p>${escapeHtml(comment.content)}</p></div>
+        <div class="comment-actions">
+          <button class="comm-vote-btn active">▲</button>
+          <span class="comm-pts">${comment.score}</span>
+          <button class="comm-vote-btn">▼</button>
+          <button class="comm-reply-btn">[REPLY]</button>
+          <button class="comm-collapse-btn">[COLLAPSE -]</button>
+        </div>`;
+      commentsStream.appendChild(card);
+      setupVoteWidget(card, comment.score, comment.id);
+    });
+  }
+
+  restorePersistedComments();
 
   // Collapse buttons in comments
   document.addEventListener('click', (e) => {
@@ -408,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   const pollOptions = document.querySelectorAll('.poll-option');
   const pollMsg = document.getElementById('poll-msg');
-  let pollVoted = false;
+  let pollVoted = Boolean(state.pollVotes.communityPoll);
 
   let pollData = [
     { votes: 1442 },
@@ -423,6 +505,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       pollVoted = true;
+      state.pollVotes.communityPoll = idx;
+      persist();
       pollData[idx].votes += 1;
 
       const total = pollData.reduce((acc, cur) => acc + cur.votes, 0);
@@ -533,7 +617,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         feed.insertBefore(newPost, featuredCard);
-        setupVoteWidget(newPost.querySelector('.vote-widget'), 1);
+        const postId = `post-${Date.now()}`;
+        newPost.dataset.postId = postId;
+        state.posts.unshift({ id: postId, title, body, flair, community: 'r/graphic_design', author: state.user.username, createdAt: new Date().toISOString(), score: 1 });
+        persist();
+        setupVoteWidget(newPost.querySelector('.vote-widget'), 1, postId);
         postTitleInput.value = '';
         postBodyInput.value = '';
         closeCreate();
@@ -542,6 +630,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  function restorePersistedPosts() {
+    const feed = document.getElementById('center-feed');
+    const featuredCard = document.getElementById('featured-post-card');
+    if (!feed || !featuredCard) return;
+    state.posts.slice().reverse().forEach(post => {
+      const card = document.createElement('article');
+      card.className = 'post-card secondary-post post-persisted';
+      card.dataset.postId = post.id;
+      card.innerHTML = `
+        <div class="post-header-bar"><div class="post-origin-meta"><span class="post-subreddit-badge">${escapeHtml(post.community)}</span><span class="divider-slash">///</span><span class="post-author">Posted by <strong>u/${escapeHtml(post.author)}</strong> [OP]</span><span class="post-timestamp">${new Date(post.createdAt).toLocaleString()}</span><span class="post-flair-badge">[${escapeHtml(post.flair)}]</span></div><span class="upvote-ratio">LOCAL_TRANSMISSION</span></div>
+        <div class="post-title-section"><h2 class="post-secondary-title">${escapeHtml(post.title)}</h2></div>
+        <div class="post-body-text"><p>${escapeHtml(post.body || 'No transmission body provided.')}</p></div>
+        <div class="post-footer-bar"><div class="vote-widget"><button class="vote-btn upvote">▲</button><span class="vote-score">${post.score}</span><button class="vote-btn downvote">▼</button></div><button class="post-action-btn"><span class="btn-glyph">[💬]</span>0_REPLIES</button><button class="post-action-btn"><span class="btn-glyph">[⎘]</span>SHARE</button></div>`;
+      feed.insertBefore(card, featuredCard);
+      setupVoteWidget(card.querySelector('.vote-widget'), post.score, post.id);
+    });
+  }
+
+  restorePersistedPosts();
 
   // --------------------------------------------------------------------------
   // 13. NOTIFICATIONS DROPDOWN & SEARCH SHORTCUT
@@ -649,8 +757,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const saveBtn = document.getElementById('save-post-btn');
   if (saveBtn) {
+    saveBtn.classList.toggle('active', state.saved.includes('featured-post'));
     saveBtn.addEventListener('click', () => {
       saveBtn.classList.toggle('active');
+      state.saved = saveBtn.classList.contains('active')
+        ? [...new Set([...state.saved, 'featured-post'])]
+        : state.saved.filter(id => id !== 'featured-post');
+      persist();
       showToast(saveBtn.classList.contains('active') ? 'PERSISTENCE: Post saved to memory cache' : 'PERSISTENCE: Post removed from saved cache');
       playClick();
     });
@@ -699,6 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
     archive: ['SPEC_ARCHIVE', 'Saved technical studies, guides, and long-form transmissions.'],
     saved: ['SAVED_TRANSMISSIONS', 'Your retained posts and reference material.'],
     history: ['ACTIVITY_LOG', 'Recently visited threads and interaction history.']
+    , community: ['START_A_COMMUNITY', 'Open a new community channel and establish its first signal.']
   };
 
   function routePost(title, community, author, score, replies, flair) {
