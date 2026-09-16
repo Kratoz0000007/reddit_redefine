@@ -3602,3 +3602,90 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .active-indicator { animation: none; }
 }
+
+/* Layout-only shell overrides. Existing colors, components, and effects remain intact. */
+.mobile-nav-toggle { display: none; }
+
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.app-layout-container {
+  display: grid;
+  grid-template-columns: minmax(220px, 248px) minmax(620px, 860px) minmax(280px, 320px);
+  justify-content: center;
+  align-items: start;
+  gap: 0;
+  width: min(100%, 1720px);
+  min-height: calc(100vh - 72px);
+  margin: 0 auto;
+}
+
+.left-sidebar,
+.right-sidebar {
+  position: sticky;
+  top: 72px;
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+  align-self: start;
+}
+
+.center-feed-column {
+  width: 100%;
+  max-width: 860px;
+  min-width: 0;
+  justify-self: center;
+}
+
+@media (max-width: 1260px) {
+  .app-layout-container { grid-template-columns: 220px minmax(0, 1fr) 280px; }
+}
+
+@media (max-width: 980px) {
+  .app-layout-container { grid-template-columns: 220px minmax(0, 1fr); }
+  .right-sidebar { display: none; }
+  .center-feed-column { max-width: none; }
+}
+
+@media (max-width: 720px) {
+  .mobile-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 34px;
+    padding: 0;
+    background: var(--surface-2);
+    border: 2px solid var(--neo-green);
+    color: var(--neo-green);
+    font: 800 0.72rem var(--font-mono);
+    cursor: pointer;
+  }
+
+  .app-layout-container { display: block; min-height: 0; }
+
+  .left-sidebar {
+    position: fixed;
+    top: 62px;
+    left: 0;
+    bottom: 0;
+    z-index: 1500;
+    display: block;
+    width: min(290px, 84vw);
+    height: auto;
+    transform: translateX(-105%);
+    transition: transform 150ms steps(2, end);
+    box-shadow: 6px 0 0 var(--neo-green);
+  }
+
+  .left-sidebar.mobile-open { transform: translateX(0); }
+  .right-sidebar { display: block; position: static; height: auto; border-left: 0; }
+  .center-feed-column { max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .left-sidebar { transition: none; }
+}

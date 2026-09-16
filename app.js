@@ -603,11 +603,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Nav links switcher
   const navItems = document.querySelectorAll('.sidebar-nav-list .nav-item');
+  const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+  const leftSidebar = document.getElementById('left-sidebar');
+
+  mobileNavToggle?.addEventListener('click', () => {
+    const isOpen = leftSidebar?.classList.toggle('mobile-open');
+    mobileNavToggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
+    mobileNavToggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+  });
+
   navItems.forEach(item => {
     item.addEventListener('click', (e) => {
       e.preventDefault();
       navItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
+      leftSidebar?.classList.remove('mobile-open');
+      mobileNavToggle?.setAttribute('aria-expanded', 'false');
       window.location.hash = `/${item.dataset.view}`;
       document.body.classList.remove('signal-transition');
       void document.body.offsetWidth;
