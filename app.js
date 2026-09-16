@@ -236,12 +236,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeLightboxBtn = document.getElementById('close-lightbox-btn');
   const downloadSpecBtn = document.getElementById('download-spec-btn');
   const copyHexBtn = document.getElementById('copy-hex-btn');
+  const openPosterCommunityBtn = document.getElementById('open-poster-community-btn');
+  let selectedPosterCommunity = 'r/reddit';
 
   const posterCards = document.querySelectorAll('.poster-item-card');
   posterCards.forEach(card => {
     card.addEventListener('click', () => {
       const posterId = card.dataset.posterId;
       const posterTitle = card.dataset.posterTitle;
+      selectedPosterCommunity = card.dataset.community || 'r/reddit';
       const canvasEl = card.querySelector('.poster-canvas');
 
       if (lightboxCanvasSlot && canvasEl) {
@@ -252,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (lightboxTitle) lightboxTitle.textContent = `INSPECT // ${posterTitle}`;
       if (telName) telName.textContent = `${posterTitle} [ID_#${posterId}]`;
+      if (openPosterCommunityBtn) openPosterCommunityBtn.textContent = `OPEN_${selectedPosterCommunity.toUpperCase()}_CHANNEL`;
 
       if (lightboxModal) {
         lightboxModal.classList.add('open');
@@ -270,6 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === lightboxModal) {
         lightboxModal.classList.remove('open');
       }
+    });
+  }
+
+  if (openPosterCommunityBtn) {
+    openPosterCommunityBtn.addEventListener('click', () => {
+      if (lightboxModal) lightboxModal.classList.remove('open');
+      window.location.hash = `/${selectedPosterCommunity}`;
+      showToast(`COMMUNITY_LINK: ${selectedPosterCommunity} channel opened`);
     });
   }
 
@@ -352,6 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitCommentBtn = document.getElementById('submit-comment-btn');
   const commentTextarea = document.getElementById('comment-textarea');
   const commentsStream = document.getElementById('comments-stream');
+
+  commentsStream?.querySelectorAll('.comment-card').forEach((card, index) => {
+    if (!card.dataset.commentId) card.dataset.commentId = `seed-comment-${index}`;
+  });
 
   if (toggleCommentsBtn && commentsSection) {
     toggleCommentsBtn.addEventListener('click', () => {
@@ -438,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function restorePersistedComments() {
     if (!commentsStream) return;
-    state.comments.slice().reverse().forEach(comment => {
+    state.comments.filter(comment => !comment.parentId).slice().reverse().forEach(comment => {
       const card = document.createElement('div');
       card.className = 'comment-card level-0';
       card.dataset.commentId = comment.id;
@@ -459,6 +475,14 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>`;
       commentsStream.appendChild(card);
       setupVoteWidget(card, comment.score, comment.id);
+      state.comments.filter(reply => reply.parentId === comment.id).slice().reverse().forEach(reply => {
+        const replyCard = document.createElement('div');
+        replyCard.className = 'comment-card level-1';
+        replyCard.dataset.commentId = reply.id;
+        replyCard.innerHTML = `<div class="comment-meta"><span class="comment-author">u/${escapeHtml(reply.author)}</span><span class="comment-time">${new Date(reply.createdAt).toLocaleString()}</span><span class="comment-score">+${reply.score} PTS</span><span class="badge-mod">[REPLY_TRANSMITTED]</span></div><div class="comment-text"><p>${escapeHtml(reply.content)}</p></div><div class="comment-actions"><button class="comm-vote-btn active">▲</button><span class="comm-pts">${reply.score}</span><button class="comm-vote-btn">▼</button><button class="comm-reply-btn">[REPLY]</button></div>`;
+        card.appendChild(replyCard);
+        setupVoteWidget(replyCard, reply.score, reply.id);
+      });
     });
   }
 
@@ -466,6 +490,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Collapse buttons in comments
   document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList.contains('comm-reply-btn')) {
+      const parent = e.target.closest('.comment-card');
+      if (!parent) return;
+      const existingComposer = parent.querySelector('.reply-composer');
+      if (existingComposer) { existingComposer.remove(); return; }
+      const composer = document.createElement('div');
+      composer.className = 'reply-composer';
+      composer.innerHTML = '<textarea class="comment-textarea reply-textarea" rows="3" placeholder="Transmit a nested reply..."></textarea><button class="brutalist-btn btn-primary btn-sm reply-submit-btn" type="button">TRANSMIT_REPLY</button>';
+      parent.appendChild(composer);
+      composer.querySelector('.reply-textarea').focus();
+      composer.querySelector('.reply-submit-btn').addEventListener('click', () => {
+        const replyText = composer.querySelector('.reply-textarea').value.trim();
+        if (!replyText) { showToast('ERROR: Reply buffer is empty'); return; }
+        const replyId = `comment-${Date.now()}`;
+        const reply = document.createElement('div');
+        reply.className = 'comment-card level-1';
+        reply.dataset.commentId = replyId;
+        reply.innerHTML = `<div class="comment-meta"><span class="comment-author">u/${escapeHtml(state.user.username)}</span><span class="comment-time">just now</span><span class="comment-score">+1 PTS</span><span class="badge-mod">[REPLY_TRANSMITTED]</span></div><div class="comment-text"><p>${escapeHtml(replyText)}</p></div><div class="comment-actions"><button class="comm-vote-btn active">▲</button><span class="comm-pts">1</span><button class="comm-vote-btn">▼</button><button class="comm-reply-btn">[REPLY]</button></div>`;
+        parent.insertBefore(reply, composer);
+        composer.remove();
+        state.comments.unshift({ id: replyId, postId: 'featured-post', parentId: parent.dataset.commentId, author: state.user.username, content: replyText, createdAt: new Date().toISOString(), score: 1 });
+        persist();
+        setupVoteWidget(reply, 1, replyId);
+        showToast('REPLY_TRANSMITTED: Nested response added');
+        playSuccess();
+      });
+      return;
+    }
     if (e.target && e.target.classList.contains('comm-collapse-btn')) {
       const card = e.target.closest('.comment-card');
       if (card) {
@@ -848,14 +900,14 @@ document.addEventListener('DOMContentLoaded', () => {
       document.title = homeTitle;
     } else if (cleanRoute.startsWith('search/')) {
       const term = decodeURIComponent(cleanRoute.slice(7).replace(/-/g, ' '));
-      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// SEARCH_RESULTS</span><h1>${term || 'NETWORK'}</h1><p>[ 1284 RESULTS_FOUND ] // QUERY_SYNCHRONIZED</p></div>${routePost(`Results for ${term || 'network'}`, 'r/search', 'index_bot', '12.8K', '284', 'SEARCH_RESULT')}${routePost('Related transmissions detected in the archive', 'r/reddit', 'signal_reader', '8.4K', '119', 'MATCHED')}`;
+      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// SEARCH_RESULTS</span><h1>${term || 'NETWORK'}</h1><p>[ 1284 RESULTS_FOUND ] // QUERY_SYNCHRONIZED</p></div>${routePost(`Results for ${term || 'network'}`, 'r/search', 'index_bot', '12.8K', '284', 'SEARCH_RESULT')}${routePost('Related transmissions detected in the archive', 'r/reddit', 'signal_reader', '8.4K', '119', 'MATCHED')}${routePost('A second signal matches your query pattern', 'r/programming', 'query_node', '6.1K', '73', 'MATCHED')}${routePost('Design systems referenced by this search', 'r/design', 'index_reader', '4.2K', '38', 'INDEXED')}`;
       document.title = `Search: ${term} // Reddit://net`;
     } else if (cleanRoute.startsWith('r/')) {
-      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// COMMUNITY_CHANNEL</span><h1>${cleanRoute}</h1><p>235K MEMBERS // 4.6K ONLINE // STATUS://CONNECTED</p><button class="brutalist-btn btn-primary route-join-btn">[+] JOIN_COMMUNITY</button></div>${routePost('Pinned transmission: establish the visual language', cleanRoute, 'arch_void', '28.7K', '342', 'PINNED')}${routePost('Critique thread // new responses available', cleanRoute, 'grid_system_mod', '9.4K', '89', 'CRITIQUE')}`;
+      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// COMMUNITY_CHANNEL</span><h1>${cleanRoute}</h1><p>235K MEMBERS // 4.6K ONLINE // STATUS://CONNECTED</p><button class="brutalist-btn btn-primary route-join-btn">[+] JOIN_COMMUNITY</button></div>${routePost('Pinned transmission: establish the visual language', cleanRoute, 'arch_void', '28.7K', '342', 'PINNED')}${routePost('Critique thread // new responses available', cleanRoute, 'grid_system_mod', '9.4K', '89', 'CRITIQUE')}${routePost('Community field notes // what are you building?', cleanRoute, 'signal_maker', '5.7K', '61', 'DISCUSSION')}${routePost('Resource drop: tools and references', cleanRoute, 'archive_node', '3.9K', '27', 'RESOURCE')}`;
       document.title = `${cleanRoute} // Reddit://net`;
     } else {
       const copy = routeCopy[cleanRoute] || ['SIGNAL_NOT_FOUND', 'The requested channel is not available in this node.'];
-      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// REDDIT://NET // ${cleanRoute.toUpperCase()}</span><h1>${copy[0]}</h1><p>${copy[1]}</p><div class="route-metrics"><span>ONLINE://42.1K</span><span>LATENCY://24MS</span><span>SIGNAL://98%</span></div></div>${routePost(`${copy[0]} // latest community transmission`, 'r/reddit', 'network_operator', '18.2K', '342', cleanRoute.toUpperCase())}${routePost('New data received from a related community', 'r/brutalism', 'archive_node', '6.8K', '77', 'NEW_DATA')}`;
+      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// REDDIT://NET // ${cleanRoute.toUpperCase()}</span><h1>${copy[0]}</h1><p>${copy[1]}</p><div class="route-metrics"><span>ONLINE://42.1K</span><span>LATENCY://24MS</span><span>SIGNAL://98%</span></div></div>${routePost(`${copy[0]} // latest community transmission`, 'r/reddit', 'network_operator', '18.2K', '342', cleanRoute.toUpperCase())}${routePost('New data received from a related community', 'r/brutalism', 'archive_node', '6.8K', '77', 'NEW_DATA')}${routePost('The implementation detail nobody notices until it breaks', 'r/technology', 'systems_reader', '4.8K', '52', 'ANALYSIS')}${routePost('Showcase: a carefully constrained visual system', 'r/design', 'visual_operator', '3.6K', '29', 'SHOWCASE')}`;
       document.title = `${copy[0]} // Reddit://net`;
     }
     centerFeed.dataset.routeActive = 'true';

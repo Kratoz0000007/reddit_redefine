@@ -1797,6 +1797,22 @@ body {
   color: var(--accent-red);
 }
 
+.reply-composer {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin: 6px 0 0 20px;
+  padding: 8px;
+  background: #050805;
+  border-left: 2px solid var(--neo-cyan);
+}
+
+.reply-textarea { flex: 1; min-height: 52px; }
+
+@media (max-width: 720px) {
+  .reply-composer { flex-direction: column; align-items: stretch; margin-left: 0; }
+}
+
 /* Secondary Posts & Poll */
 .code-spec-snippet {
   background: #000000;
@@ -3628,6 +3644,23 @@ body::after {
 .post-poster-grid-wrapper { padding: 16px; border-width: 2px; box-shadow: inset 0 0 0 1px #303030; }
 .poster-item-card { border-color: var(--line-dark); box-shadow: 4px 4px 0 #000; }
 .poster-item-card:hover { border-color: var(--neo-green); box-shadow: 6px 6px 0 var(--neo-green); }
+.poster-item-card { cursor: pointer; }
+.poster-item-card::after {
+  content: "OPEN COMMUNITY // +";
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  z-index: 8;
+  padding: 3px 5px;
+  opacity: 0;
+  background: var(--neo-green);
+  color: #000;
+  border: 1px solid #000;
+  font: 700 0.55rem var(--font-mono);
+  transform: translateY(-3px);
+  transition: opacity 100ms steps(2, end), transform 100ms steps(2, end);
+}
+.poster-item-card:hover::after { opacity: 1; transform: translateY(0); }
 
 .post-footer-bar { border-color: var(--line-dark); }
 .vote-widget {
