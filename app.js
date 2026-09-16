@@ -1,12 +1,12 @@
 /**
- * REDEFINE: CYBER-BRUTALIST REDDIT APPLICATION LOGIC (r/graphic_design)
+ * REDEFINE: CYBER-BRUTALIST REDDIT APPLICATION LOGIC (r/reddit)
  * Full implementation with REDEFINE Track 1: Brutalism
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   const STORAGE_KEY = 'reddit-redefine-state-v1';
   const defaultState = {
-    user: { username: 'brutalist_user', joined: ['r/graphic_design'], karma: 32400 },
+    user: { username: 'brutalist_user', joined: ['r/reddit'], karma: 32400 },
     votes: {},
     saved: [],
     posts: [],
@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const state = loadState();
   const persist = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (state.user.joined.includes('r/graphic_design')) {
+    state.user.joined = state.user.joined.map(name => name === 'r/graphic_design' ? 'r/reddit' : name);
+    persist();
+  }
   const recordHistory = value => {
     state.history = [value, ...state.history.filter(item => item !== value)].slice(0, 20);
     persist();
@@ -306,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   const joinBtn = document.getElementById('join-community-btn');
   const joinStatusText = document.getElementById('join-status-text');
-  let isJoined = state.user.joined.includes('r/graphic_design');
+  let isJoined = state.user.joined.includes('r/reddit');
 
   function renderJoinState() {
     if (!joinBtn || !joinStatusText) return;
@@ -321,14 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
     joinBtn.addEventListener('click', () => {
       isJoined = !isJoined;
       state.user.joined = isJoined
-        ? [...new Set([...state.user.joined, 'r/graphic_design'])]
-        : state.user.joined.filter(name => name !== 'r/graphic_design');
+        ? [...new Set([...state.user.joined, 'r/reddit'])]
+        : state.user.joined.filter(name => name !== 'r/reddit');
       persist();
       if (isJoined) {
         joinBtn.classList.remove('btn-primary');
         joinBtn.classList.add('btn-secondary');
         joinStatusText.textContent = 'LEAVE COMMUNITY [JOINED]';
-        showToast('COMMUNITY_LINK: r/graphic_design operator node registered');
+        showToast('COMMUNITY_LINK: r/reddit operator node registered');
         playSuccess();
       } else {
         joinBtn.classList.remove('btn-secondary');
@@ -418,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.comments.unshift({ id: commentId, postId: 'featured-post', author: state.user.username, content, createdAt: new Date().toISOString(), score: 1 });
       persist();
       setupVoteWidget(newCard, 1, commentId);
-      showToast('COMMENT_POSTED: Analysis broadcast to r/graphic_design');
+      showToast('COMMENT_POSTED: Analysis broadcast to r/reddit');
       playSuccess();
     });
   }
@@ -591,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newPost.innerHTML = `
           <div class="post-header-bar">
             <div class="post-origin-meta">
-              <span class="post-subreddit-badge">r/graphic_design</span>
+              <span class="post-subreddit-badge">r/reddit</span>
               <span class="divider-slash">///</span>
               <span class="post-author">Posted by <strong>u/brutalist_user</strong> [OP]</span>
               <span class="post-timestamp">just now</span>
@@ -619,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
         feed.insertBefore(newPost, featuredCard);
         const postId = `post-${Date.now()}`;
         newPost.dataset.postId = postId;
-        state.posts.unshift({ id: postId, title, body, flair, community: 'r/graphic_design', author: state.user.username, createdAt: new Date().toISOString(), score: 1 });
+        state.posts.unshift({ id: postId, title, body, flair, community: 'r/reddit', author: state.user.username, createdAt: new Date().toISOString(), score: 1 });
         persist();
         setupVoteWidget(newPost.querySelector('.vote-widget'), 1, postId);
         postTitleInput.value = '';
@@ -831,14 +835,14 @@ document.addEventListener('DOMContentLoaded', () => {
       document.title = homeTitle;
     } else if (cleanRoute.startsWith('search/')) {
       const term = decodeURIComponent(cleanRoute.slice(7).replace(/-/g, ' '));
-      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// SEARCH_RESULTS</span><h1>${term || 'NETWORK'}</h1><p>[ 1284 RESULTS_FOUND ] // QUERY_SYNCHRONIZED</p></div>${routePost(`Results for ${term || 'network'}`, 'r/search', 'index_bot', '12.8K', '284', 'SEARCH_RESULT')}${routePost('Related transmissions detected in the archive', 'r/graphic_design', 'signal_reader', '8.4K', '119', 'MATCHED')}`;
+      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// SEARCH_RESULTS</span><h1>${term || 'NETWORK'}</h1><p>[ 1284 RESULTS_FOUND ] // QUERY_SYNCHRONIZED</p></div>${routePost(`Results for ${term || 'network'}`, 'r/search', 'index_bot', '12.8K', '284', 'SEARCH_RESULT')}${routePost('Related transmissions detected in the archive', 'r/reddit', 'signal_reader', '8.4K', '119', 'MATCHED')}`;
       document.title = `Search: ${term} // Reddit://net`;
     } else if (cleanRoute.startsWith('r/')) {
       centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// COMMUNITY_CHANNEL</span><h1>${cleanRoute}</h1><p>235K MEMBERS // 4.6K ONLINE // STATUS://CONNECTED</p><button class="brutalist-btn btn-primary route-join-btn">[+] JOIN_COMMUNITY</button></div>${routePost('Pinned transmission: establish the visual language', cleanRoute, 'arch_void', '28.7K', '342', 'PINNED')}${routePost('Critique thread // new responses available', cleanRoute, 'grid_system_mod', '9.4K', '89', 'CRITIQUE')}`;
       document.title = `${cleanRoute} // Reddit://net`;
     } else {
       const copy = routeCopy[cleanRoute] || ['SIGNAL_NOT_FOUND', 'The requested channel is not available in this node.'];
-      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// REDDIT://NET // ${cleanRoute.toUpperCase()}</span><h1>${copy[0]}</h1><p>${copy[1]}</p><div class="route-metrics"><span>ONLINE://42.1K</span><span>LATENCY://24MS</span><span>SIGNAL://98%</span></div></div>${routePost(`${copy[0]} // latest community transmission`, 'r/graphic_design', 'network_operator', '18.2K', '342', cleanRoute.toUpperCase())}${routePost('New data received from a related community', 'r/brutalism', 'archive_node', '6.8K', '77', 'NEW_DATA')}`;
+      centerFeed.innerHTML = `<div class="route-heading"><span class="route-kicker">/// REDDIT://NET // ${cleanRoute.toUpperCase()}</span><h1>${copy[0]}</h1><p>${copy[1]}</p><div class="route-metrics"><span>ONLINE://42.1K</span><span>LATENCY://24MS</span><span>SIGNAL://98%</span></div></div>${routePost(`${copy[0]} // latest community transmission`, 'r/reddit', 'network_operator', '18.2K', '342', cleanRoute.toUpperCase())}${routePost('New data received from a related community', 'r/brutalism', 'archive_node', '6.8K', '77', 'NEW_DATA')}`;
       document.title = `${copy[0]} // Reddit://net`;
     }
     centerFeed.dataset.routeActive = 'true';
@@ -854,7 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const route = window.location.hash.slice(1) || '/home';
     const baseRoute = route.replace(/^\//, '').split('/')[0];
     navItems.forEach(item => item.classList.toggle('active', item.dataset.view === baseRoute));
-    renderRoute(route.startsWith('/post/') ? 'r/graphic_design' : route);
+    renderRoute(route.startsWith('/post/') ? 'r/reddit' : route);
     if (route.startsWith('/post/')) document.title = 'POST_ID://48291 // Reddit://net';
   }
 

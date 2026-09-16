@@ -3090,6 +3090,37 @@ body::after {
   box-shadow: 4px 4px 0 var(--neo-green);
 }
 
+.logo-avatar-box .avatar-glyph {
+  position: relative;
+  display: block;
+  color: #000;
+  font-size: 1.7rem;
+  line-height: 1;
+  text-shadow: none;
+}
+
+.logo-avatar-box .avatar-glyph::before,
+.logo-avatar-box .avatar-glyph::after {
+  content: "";
+  position: absolute;
+  top: -0.28em;
+  width: 0.14em;
+  height: 0.32em;
+  background: #000;
+}
+
+.logo-avatar-box .avatar-glyph::before { left: 0.28em; transform: rotate(-28deg); }
+.logo-avatar-box .avatar-glyph::after { right: 0.28em; transform: rotate(28deg); }
+
+.logo-group:hover .avatar-glyph,
+.logo-group:hover .subreddit-tag { animation: logo-glitch 180ms steps(2, end); }
+
+@keyframes logo-glitch {
+  0%, 100% { transform: translateX(0); }
+  35% { transform: translateX(2px) skewX(-8deg); text-shadow: 2px 0 var(--neo-cyan), -2px 0 var(--neo-magenta); }
+  70% { transform: translateX(-1px); }
+}
+
 .subreddit-tag {
   font-size: 1.3rem;
   letter-spacing: 0;
