@@ -645,6 +645,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Featured post options
+  document.querySelectorAll('.post-options-wrap').forEach(options => {
+    const menuButton = options.querySelector('.header-menu-btn');
+    const menu = options.querySelector('.post-options-menu');
+    const removeButton = options.querySelector('.remove-post-btn');
+
+    menuButton?.addEventListener('click', event => {
+      event.stopPropagation();
+      const isOpen = menu?.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(Boolean(isOpen)));
+    });
+
+    removeButton?.addEventListener('click', () => {
+      const post = options.closest('.post-card');
+      if (!post || !window.confirm('Remove this post from the feed?')) return;
+      post.classList.add('post-removing');
+      window.setTimeout(() => {
+        post.remove();
+        showToast('POST_REMOVED: Transmission deleted from local feed');
+      }, 180);
+    });
+  });
+
+  document.addEventListener('click', event => {
+    document.querySelectorAll('.post-options-menu.open').forEach(menu => {
+      if (!menu.parentElement.contains(event.target)) {
+        menu.classList.remove('open');
+        menu.parentElement.querySelector('.header-menu-btn')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
   // Client-side Reddit pages share the existing shell and preserve home markup.
   const centerFeed = document.getElementById('center-feed');
   const homeFeedMarkup = centerFeed ? centerFeed.innerHTML : '';

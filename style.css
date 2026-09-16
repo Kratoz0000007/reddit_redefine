@@ -949,6 +949,48 @@ body {
   gap: 10px;
 }
 
+.post-options-wrap { position: relative; }
+
+.post-options-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  display: none;
+  min-width: 170px;
+  padding: 4px;
+  background: #050805;
+  border: 2px solid var(--neo-green);
+  box-shadow: 4px 4px 0 #001b08;
+}
+
+.post-options-menu.open { display: block; }
+
+.remove-post-btn {
+  width: 100%;
+  padding: 8px 9px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #ff8297;
+  font: 700 0.68rem var(--font-mono);
+  text-align: left;
+  cursor: pointer;
+}
+
+.remove-post-btn:hover,
+.remove-post-btn:focus-visible {
+  background: var(--neo-red);
+  border-color: #000;
+  color: #fff;
+  outline: none;
+}
+
+.post-removing {
+  opacity: 0;
+  transform: translateX(12px) !important;
+  transition: opacity 180ms steps(2, end), transform 180ms steps(2, end);
+}
+
 .upvote-ratio {
   font-size: 0.7rem;
   color: var(--text-muted);
