@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>r/graphic_design // network terminal</title>
+  <meta name="description" content="A dense cyber-brutalist Reddit-style discussion interface for graphic design communities.">
+  
+  <!-- Google Fonts: Space Mono, Syne, Archivo Black, JetBrains Mono, IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;0,800;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="track-cyber-brutalism">
+
+  <div class="crt-overlay" aria-hidden="true"></div>
+  <div class="boot-screen" id="boot-screen" aria-hidden="true">
+    <div class="boot-panel">
+      <div class="boot-title glitch-text" data-text="BOOTING REDDIT://NET">BOOTING REDDIT://NET</div>
+      <div class="boot-progress"><span></span></div>
+      <div class="boot-log" id="boot-log">&gt; INITIALIZING NETWORK...</div>
+    </div>
+  </div>
+
+  <!-- 1. TOP NAVIGATION BAR -->
+  <header class="top-nav" id="top-nav">
+    <div class="nav-left">
+      <a href="#" class="logo-group" id="nav-logo" title="r/graphic_design Home">
+        <div class="logo-avatar-box">
+          <span class="avatar-glyph">■</span>
+        </div>
+        <div class="logo-text-block">
+          <span class="subreddit-tag glitch-text" data-text="r/graphic_design">r/graphic_design</span>
+          <span class="system-build-tag">[REDEFINE: 1b_CYBER_BRUTALISM]</span>
+        </div>
+      </a>
+      <div class="nav-status-badge">
+        <span class="status-dot"></span>
+        <span class="status-label">SYS_ONLINE</span>
+      </div>
+    </div>
+
+    <!-- Center Search Bar -->
+    <div class="nav-center">
+      <div class="search-container">
+        <span class="search-prefix">&gt;&gt;</span>
+        <input type="text" id="main-search-input" class="search-input" placeholder="Search Reddit network..." autocomplete="off">
+        <span class="search-cursor" aria-hidden="true">_</span>
+        <span class="search-shortcut">[CTRL+K]</span>
+      </div>
+    </div>
+
+    <!-- Right Actions: Cyber Network Tools -->
+    <div class="nav-right">
+      <button class="brutalist-btn btn-primary" id="open-create-modal-btn">
+        <span class="btn-icon">+</span>
+        <span class="btn-text">CREATE_POST</span>
+      </button>
+
+      <button class="icon-action-btn" id="audio-toggle-btn" title="Toggle Cyber-Brutalist Audio FX" aria-label="Toggle Audio">
+        <span class="audio-icon-status" id="audio-status-text">SFX:ON</span>
+      </button>
+
+      <div class="notifications-node" id="notifications-node" title="Incoming Alerts">
+        <button class="icon-action-btn notif-btn" id="notif-btn">
+          <span>[!]</span>
+          <span class="notif-badge">3</span>
+        </button>
+        <!-- Alerts Dropdown -->
+        <div class="brutalist-dropdown" id="notif-dropdown">
+          <div class="dropdown-header">/// REDEFINE_NOTIFICATIONS (03)</div>
+          <div class="dropdown-item unread">
+            <span class="item-code">[SYS_CALIB]</span>
+            <span class="item-text">Neon green signal calibrated to maximum dynamic range.</span>
+          </div>
+          <div class="dropdown-item unread">
+            <span class="item-code">[TRACK_1b]</span>
+            <span class="item-text">Cyber Brutalism spec loaded: text-shadow 0 0 8px active.</span>
+          </div>
+          <div class="dropdown-item">
+            <span class="item-code">[SYSTEM]</span>
+            <span class="item-text">0px border-radius constraints verified [PASS].</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="user-profile-widget" id="user-profile-widget">
+        <div class="user-avatar-sq">OP</div>
+        <div class="user-meta-text">
+          <span class="user-handle">u/brutalist_user</span>
+          <span class="user-karma">32.4k_KARMA</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN 3-COLUMN LAYOUT WRAPPER (SWISS GRID COMPLIANT) -->
+  <div class="app-layout-container">
+
+    <!-- 2. LEFT SIDEBAR (NAVIGATION & COMMUNITIES) -->
+    <aside class="left-sidebar" id="left-sidebar">
+      <div class="sidebar-scroll-content">
+        
+        <!-- Section 1: Navigation -->
+        <div class="sidebar-section">
+          <div class="section-title-bar">
+            <span class="ascii-icon">///</span>
+            <span class="section-name">NAVIGATION</span>
+          </div>
+          <nav class="sidebar-nav-list">
+            <a href="#/home" class="nav-item active" data-view="home">
+              <span class="nav-index">[01]</span>
+              <span class="nav-label">HOME_FEED</span>
+              <span class="nav-edge">&gt;</span>
+            </a>
+            <a href="#/popular" class="nav-item" data-view="popular">
+              <span class="nav-index">[02]</span>
+              <span class="nav-label">POPULAR_GLOBAL</span>
+              <span class="nav-edge">&gt;</span>
+            </a>
+            <a href="#/news" class="nav-item" data-view="news">
+              <span class="nav-index">[03]</span>
+              <span class="nav-label">DESIGN_NEWS</span>
+              <span class="nav-edge">&gt;</span>
+            </a>
+            <a href="#/explore" class="nav-item" data-view="explore">
+              <span class="nav-index">[04]</span>
+              <span class="nav-label">EXPLORE_INDEX</span>
+              <span class="nav-edge">&gt;</span>
+            </a>
+            <a href="#/archive" class="nav-item" data-view="archive">
+              <span class="nav-index">[05]</span>
+              <span class="nav-label">SPEC_ARCHIVE</span>
+              <span class="nav-edge">&gt;</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="ascii-divider-line">
+          <span>[=============================]</span>
+        </div>
+
+        <!-- Section 2: Communities -->
+        <div class="sidebar-section">
+          <div class="section-title-bar">
+            <span class="ascii-icon">:::</span>
+            <span class="section-name">COMMUNITIES</span>
+            <span class="section-count">(06)</span>
+          </div>
+          <ul class="communities-list">
+            <li class="community-row active-community">
+              <span class="community-sq-avatar red-fill">GD</span>
+              <div class="comm-info">
+                <span class="comm-title">r/graphic_design</span>
+                <span class="comm-meta">235K • ACTIVE</span>
+              </div>
+              <span class="active-indicator">[●]</span>
+            </li>
+            <li class="community-row">
+              <span class="community-sq-avatar">RG</span>
+              <div class="comm-info">
+                <span class="comm-title">r/retrogaming</span>
+                <span class="comm-meta">890K • SUBBED</span>
+              </div>
+              <span class="comm-join-pin">+</span>
+            </li>
+            <li class="community-row">
+              <span class="community-sq-avatar">AR</span>
+              <div class="comm-info">
+                <span class="comm-title">r/AskReddit</span>
+                <span class="comm-meta">42M • DEFAULT</span>
+              </div>
+              <span class="comm-join-pin">+</span>
+            </li>
+            <li class="community-row">
+              <span class="community-sq-avatar">BR</span>
+              <div class="comm-info">
+                <span class="comm-title">r/brutalism</span>
+                <span class="comm-meta">145K • ARCH</span>
+              </div>
+              <span class="comm-join-pin">+</span>
+            </li>
+            <li class="community-row">
+              <span class="community-sq-avatar">AG</span>
+              <div class="comm-info">
+                <span class="comm-title">r/acidgraphics</span>
+                <span class="comm-meta">78K • EXPERIMENTAL</span>
+              </div>
+              <span class="comm-join-pin">+</span>
+            </li>
+            <li class="community-row">
+              <span class="community-sq-avatar">TY</span>
+              <div class="comm-info">
+                <span class="comm-title">r/typography</span>
+                <span class="comm-meta">190K • FONTS</span>
+              </div>
+              <span class="comm-join-pin">+</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ascii-divider-line">
+          <span>/// CUSTOM_FEEDS ------------&gt;</span>
+        </div>
+
+        <!-- Section 3: Custom Feeds & Feeds -->
+        <div class="sidebar-section">
+          <div class="custom-feeds-list">
+            <a href="#" class="feed-sublink">
+              <span class="feed-prefix">&gt;</span>
+              <span class="feed-title">/feed/live_network</span>
+            </a>
+            <a href="#" class="feed-sublink">
+              <span class="feed-prefix">&gt;</span>
+              <span class="feed-title">/feed/top_transmissions</span>
+            </a>
+            <a href="#" class="feed-sublink">
+              <span class="feed-prefix">&gt;</span>
+              <span class="feed-title">/feed/asset_archive</span>
+            </a>
+            <a href="#" class="feed-sublink">
+              <span class="feed-prefix">&gt;</span>
+              <span class="feed-title">/dev/null_trash</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Terminal Status Ticker Widget -->
+        <div class="sidebar-terminal-box">
+          <div class="terminal-bar">
+            <span>REDEFINE_DIAG</span>
+            <span class="terminal-blink">_</span>
+          </div>
+          <div class="terminal-content">
+            <div>MODE: CYBER_BRUTALISM // ACTIVE</div>
+            <div>ACCENT: NEON GREEN // #00FF41</div>
+            <div>NODE: REDDIT_NET_07 [ALIGNED]</div>
+          </div>
+          <div class="terminal-readout"><span>LATENCY://24MS</span><span>SIGNAL://98%</span><span>PACKETS://STABLE</span></div>
+        </div>
+
+      </div>
+    </aside>
+
+
+    <!-- 3. CENTER COLUMN (MAIN POST FEED) -->
+    <main class="center-feed-column" id="center-feed">
+      
+      <!-- BACKGROUND LAYER DETAIL: OUTLINE-ONLY MARQUEE TEXT 'BRUTALISM' -->
+      <div class="brutalism-background-layer" aria-hidden="true">
+        <div class="marquee-track">
+          <span class="marquee-text">BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM</span>
+          <span class="marquee-text">BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM BRUTALISM</span>
+        </div>
+        <div class="marquee-track reverse">
+          <span class="marquee-text">REDEFINE_2026 REDEFINE_2026 REDEFINE_2026 REDEFINE_2026 REDEFINE_2026 REDEFINE_2026</span>
+          <span class="marquee-text">REDEFINE_2026 REDEFINE_2026 REDEFINE_2026 REDEFINE_2026 REDEFINE_2026 REDEFINE_2026</span>
+        </div>
+        <div class="marquee-track">
+          <span class="marquee-text">CYBER_SWISS_NEO CYBER_SWISS_NEO CYBER_SWISS_NEO CYBER_SWISS_NEO CYBER_SWISS_NEO</span>
+          <span class="marquee-text">CYBER_SWISS_NEO CYBER_SWISS_NEO CYBER_SWISS_NEO CYBER_SWISS_NEO CYBER_SWISS_NEO</span>
+        </div>
+      </div>
+
+      <!-- Center Feed Header / Quick Sort Bar -->
+      <div class="feed-controls-card">
+        <div class="sort-tabs-container">
+          <span class="sort-prefix">FEED_ORDER:</span>
+          <button class="sort-btn active" data-sort="hot"><span class="sort-bracket">[</span> HOT <span class="sort-bracket">]</span></button>
+          <button class="sort-btn" data-sort="new"><span class="sort-bracket">[</span> NEW <span class="sort-bracket">]</span></button>
+          <button class="sort-btn" data-sort="top"><span class="sort-bracket">[</span> TOP <span class="sort-bracket">]</span></button>
+          <button class="sort-btn" data-sort="rising"><span class="sort-bracket">[</span> RISING <span class="sort-bracket">]</span></button>
+        </div>
+        <div class="feed-meta-counter">
+          <span>SHOWING: 3 POSTS // BUFFER_READY</span>
+        </div>
+      </div>
+
+      <!-- MAIN FEATURED POST CARD -->
+      <article class="post-card main-featured-post" id="featured-post-card">
+        
+        <!-- Post Top Meta Header -->
+        <div class="post-header-bar">
+          <div class="post-origin-meta">
+            <span class="post-subreddit-badge">r/graphic_design</span>
+            <span class="divider-slash">///</span>
+            <span class="post-author">Posted by <strong>u/arch_void</strong> [OP]</span>
+            <span class="post-timestamp">4h ago</span>
+            <span class="post-flair-badge">[REDEFINE_ESSAY]</span>
+          </div>
+          <div class="post-header-actions">
+            <span class="upvote-ratio">98% UPVOTED</span>
+            <button class="header-menu-btn" title="Post Options">•••</button>
+          </div>
+        </div>
+
+        <!-- Post Title Header -->
+        <div class="post-title-section">
+          <h1 class="post-main-title glitch-text" data-text="How I built a visual network terminal from raw brutalism">How I built a visual network terminal from raw brutalism</h1>
+          <div class="post-sub-specs">
+            <span>PROTOCOL: CYBER_BRUTALISM</span>
+            <span>NODE: REDDIT_NET_07</span>
+            <span>SIGNAL: 98%</span>
+          </div>
+        </div>
+
+        <!-- Post Essay Writeup Content with REDEFINE Guide Alignment -->
+        <div class="post-body-text">
+          <p>
+            I am conducting a critical research essay for the <strong>REDEFINE Designathon</strong> analyzing the fundamental definition of <em>Brutalism</em>: <strong>"Raw, blocky, high-contrast. Structure is exposed rather than hidden — nothing is softened, rounded away, or explained twice."</strong>
+          </p>
+          
+          <!-- Cyber system specification -->
+          <div class="tracks-guide-box">
+            <div class="tracks-guide-header">/// CYBER_BRUTALISM_SYSTEM_SPEC:</div>
+            
+            <div class="track-definition">
+              <strong>STRUCTURE:</strong> Raw rectangular panels, exposed hierarchy, thick selected borders, and hard offset shadows that make every interaction feel physical.
+            </div>
+            <div class="track-definition">
+              <strong>NETWORK:</strong> Terminal metadata, status LEDs, signal readouts, and ASCII commands expose the social graph beneath the interface.
+            </div>
+            <div class="track-definition">
+              <strong>INTERFERENCE:</strong> Neon green dominates the void while cyan and magenta channel splits interrupt headings for milliseconds, never the actual data.
+            </div>
+          </div>
+
+          <p class="accent-callout">
+            <strong>&gt;&gt; SIGNATURE_MOVE_TELEMETRY:</strong> Below is a 3x2 poster art study rendered as a live asset buffer for the network.
+          </p>
+        </div>
+
+        <!-- IMAGE GRID CONTAINER (3x2 GRID OF HIGH-CONTRAST POSTER ART ASSETS) -->
+        <div class="post-poster-grid-wrapper">
+          <div class="poster-grid-header">
+            <div class="grid-label">
+              <span class="grid-ascii-tag">[=== 3x2 POSTER ART SPEC SHEET /// REDEFINE TRACKS ===]</span>
+              <span class="grid-sub-info">CLICK POSTER FOR RAW ASSET TELEMETRY &amp; ZOOM</span>
+            </div>
+            <div class="grid-controls-quick">
+              <span class="badge-red-outline">TRACK 1: RAW // 0PX // 1-BIT RASTER</span>
+            </div>
+          </div>
+
+          <div class="poster-grid 3x2-grid" id="main-poster-grid">
+            
+            <!-- Poster Asset 01: 1b. Cyber Brutalism / Architectural Béton Brut -->
+            <div class="poster-item-card" data-poster-id="01" data-poster-title="1b. CYBER BÉTON // BANHAM 1955" data-poster-type="CYBER_BRUTALISM" data-aspect="3:4">
+              <div class="poster-graphic-stage halftone-filter-target">
+                <div class="poster-canvas poster-canvas-1">
+                  <div class="poster-grid-lines"></div>
+                  <div class="poster-header-code">/// 1b_CYBER // 1955 SPEC</div>
+                  <div class="poster-giant-type">BÉTON<br>BRUT</div>
+                  <div class="poster-geometric-concrete">
+                    <div class="block b-1"></div>
+                    <div class="block b-2"></div>
+                    <div class="block b-3"></div>
+                  </div>
+                  <div class="poster-footer-mono">
+                    <span>RAW EXPOSED MASS</span>
+                    <span>text-shadow: 0 0 8px</span>
+                  </div>
+                </div>
+              </div>
+              <div class="poster-meta-strip">
+                <span class="poster-index">[01]</span>
+                <span class="poster-name">1b_CYBER_BÉTON.SPEC</span>
+                <span class="poster-action-zoom">[+]</span>
+              </div>
+            </div>
+
+            <!-- Poster Asset 02: 1c. Swiss Brutalism / Orthogonal Anti-Grid -->
+            <div class="poster-item-card" data-poster-id="02" data-poster-title="1c. SWISS BRUTALISM // 12-COL GRID" data-poster-type="SWISS_BRUTALISM" data-aspect="3:4">
+              <div class="poster-graphic-stage halftone-filter-target">
+                <div class="poster-canvas poster-canvas-2">
+                  <div class="poster-header-code">1c. SWISS /// BASEL 12-COL</div>
+                  <div class="raster-dot-overlay"></div>
+                  <div class="poster-swiss-title">ORTHO<br>GONAL</div>
+                  <div class="poster-swiss-bars">
+                    <div class="bar r1"></div>
+                    <div class="bar r2"></div>
+                    <div class="bar r3"></div>
+                  </div>
+                  <div class="poster-swiss-data">
+                    <div>PALETTE: RED, BLACK, WHITE</div>
+                    <div>ACCENT: GREEN STRICT</div>
+                  </div>
+                </div>
+              </div>
+              <div class="poster-meta-strip">
+                <span class="poster-index">[02]</span>
+                <span class="poster-name">1c_SWISS_GRID.POSTER</span>
+                <span class="poster-action-zoom">[+]</span>
+              </div>
+            </div>
+
+            <!-- Poster Asset 03: 1b. Cyber Constructivism / Terminal Agitprop -->
+            <div class="poster-item-card" data-poster-id="03" data-poster-title="1b. CYBER AGITPROP // SCHEMATIC" data-poster-type="CYBER_BRUTALISM" data-aspect="3:4">
+              <div class="poster-graphic-stage halftone-filter-target">
+                <div class="poster-canvas poster-canvas-3">
+                  <div class="poster-diagonal-banner">RAW SCHEMATIC</div>
+                  <div class="poster-constructivist-sun">
+                    <div class="sun-ring"></div>
+                    <div class="sun-wedge"></div>
+                  </div>
+                  <div class="poster-bold-word">STRUCT</div>
+                  <div class="poster-footer-mono">
+                    <span>ASCII: /// --- &gt;</span>
+                    <span>#000000 TRUE BLACK</span>
+                  </div>
+                </div>
+              </div>
+              <div class="poster-meta-strip">
+                <span class="poster-index">[03]</span>
+                <span class="poster-name">1b_CYBER_AGITPROP.RAW</span>
+                <span class="poster-action-zoom">[+]</span>
+              </div>
+            </div>
+
+            <!-- Poster Asset 04: Monospace Glyph Specimen -->
+            <div class="poster-item-card" data-poster-id="04" data-poster-title="1b. MONOSPACE SET // 256 CHARS" data-poster-type="CYBER_MONO" data-aspect="3:4">
+              <div class="poster-graphic-stage halftone-filter-target">
+                <div class="poster-canvas poster-canvas-4">
+                  <div class="poster-header-code">MONO THROUGHOUT /// 256</div>
+                  <div class="ascii-poster-art">
+                    +-------------------+<br>
+                    | /// REDEFINE_1b |<br>
+                    | [*] 0xDEADBEEF    |<br>
+                    | === RAW_KERNEL=== |<br>
+                    +-------------------+
+                  </div>
+                  <div class="poster-huge-char">01</div>
+                  <div class="poster-footer-mono">
+                    <span>SPACE_MONO / JETBRAINS</span>
+                    <span>0PX BORDER-RADIUS</span>
+                  </div>
+                </div>
+              </div>
+              <div class="poster-meta-strip">
+                <span class="poster-index">[04]</span>
+                <span class="poster-name">1b_MONO_SPECIMEN.DAT</span>
+                <span class="poster-action-zoom">[+]</span>
+              </div>
+            </div>
+
+            <!-- Poster Asset 05: Glitch Distortion & Noise Raster -->
+            <div class="poster-item-card" data-poster-id="05" data-poster-title="1b. SIGNAL DEGRADE // 1-BIT NOISE" data-poster-type="GLITCH_RASTER" data-aspect="3:4">
+              <div class="poster-graphic-stage halftone-filter-target">
+                <div class="poster-canvas poster-canvas-5">
+                  <div class="glitch-band-1"></div>
+                  <div class="glitch-band-2"></div>
+                  <div class="poster-giant-type glitch-font">NOISE</div>
+                  <div class="scanlines-pattern"></div>
+                  <div class="poster-footer-mono">
+                    <span>NEON TEXT-SHADOW</span>
+                    <span>CONSOLE_OUTPUT</span>
+                  </div>
+                </div>
+              </div>
+              <div class="poster-meta-strip">
+                <span class="poster-index">[05]</span>
+                <span class="poster-name">1b_SIGNAL_DEGRADE.ART</span>
+                <span class="poster-action-zoom">[+]</span>
+              </div>
+            </div>
+
+            <!-- Poster Asset 06: 1a. Neo-Brutalism Acid Void / Stamped Button Feel -->
+            <div class="poster-item-card" data-poster-id="06" data-poster-title="1a. NEO-BRUTALIST STAMP // 3PX+6PX" data-poster-type="NEO_BRUTALISM" data-aspect="3:4">
+              <div class="poster-graphic-stage halftone-filter-target">
+                <div class="poster-canvas poster-canvas-6">
+                  <div class="acid-corner-cross top-l">+</div>
+                  <div class="acid-corner-cross top-r">+</div>
+                  <div class="acid-corner-cross bot-l">+</div>
+                  <div class="acid-corner-cross bot-r">+</div>
+                  <div class="acid-circle-stamp">STAMP</div>
+                  <div class="poster-giant-type inverted-type">VÖID</div>
+                  <div class="poster-footer-mono">
+                    <span>border: 3px solid #000</span>
+                    <span>box-shadow: 6px 6px 0 #000</span>
+                  </div>
+                </div>
+              </div>
+              <div class="poster-meta-strip">
+                <span class="poster-index">[06]</span>
+                <span class="poster-name">1a_NEO_STAMP_VOID.RED</span>
+                <span class="poster-action-zoom">[+]</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Post Action Buttons Footer -->
+        <div class="post-footer-bar">
+          <!-- Upvote/Downvote Group -->
+          <div class="vote-widget" id="vote-widget-main">
+            <button class="vote-btn upvote" id="vote-up-btn" aria-label="Upvote">
+              <span class="vote-symbol">▲</span>
+            </button>
+            <span class="vote-score" id="vote-score-display">28.7K</span>
+            <button class="vote-btn downvote" id="vote-down-btn" aria-label="Downvote">
+              <span class="vote-symbol">▼</span>
+            </button>
+          </div>
+
+          <!-- Reply Button -->
+          <button class="post-action-btn" id="toggle-comments-btn">
+            <span class="btn-glyph">[💬]</span>
+            <span class="btn-text">342_REPLIES</span>
+          </button>
+
+          <!-- Share Button -->
+          <button class="post-action-btn" id="share-post-btn">
+            <span class="btn-glyph">[⎘]</span>
+            <span class="btn-text">SHARE_NODE</span>
+          </button>
+
+          <!-- Save Button -->
+          <button class="post-action-btn" id="save-post-btn">
+            <span class="btn-glyph">[💾]</span>
+            <span class="btn-text">SAVE_DISK</span>
+          </button>
+
+          <!-- Report Button -->
+          <button class="post-action-btn danger-hover" id="report-post-btn">
+            <span class="btn-glyph">[⚠]</span>
+            <span class="btn-text">FLAG</span>
+          </button>
+        </div>
+
+        <!-- NESTED THREADED COMMENTS SECTION -->
+        <section class="comments-section" id="comments-section">
+          <div class="comments-header-bar">
+            <span class="comments-title">/// THREAD_DISCUSSION (342 RESPONSES)</span>
+            <span class="sort-comments-label">SORT: [TOP_ANALYSIS]</span>
+          </div>
+
+          <!-- Quick Comment Input Box -->
+          <div class="add-comment-box">
+            <div class="comment-input-header">
+              <span>REPLY AS: <strong>u/brutalist_user</strong></span>
+              <div class="format-shortcuts">
+                <button class="fmt-btn" data-fmt="b">[B]</button>
+                <button class="fmt-btn" data-fmt="i">[I]</button>
+                <button class="fmt-btn" data-fmt="code">[CODE]</button>
+                <button class="fmt-btn" data-fmt="ascii">[ASCII]</button>
+              </div>
+            </div>
+            <textarea id="comment-textarea" class="comment-textarea" placeholder="Contribute your analysis to the REDEFINE brutalism essay discussion..."></textarea>
+            <div class="comment-input-footer">
+              <span class="char-count">MARKDOWN ENABLED // STRICT MONO // 0PX CONSTRAINTS</span>
+              <button class="brutalist-btn btn-primary btn-sm" id="submit-comment-btn">POST_ANALYSIS</button>
+            </div>
+          </div>
+
+          <!-- Threaded Comments List -->
+          <div class="comments-stream" id="comments-stream">
+            
+            <!-- Comment 1 (Top Level) -->
+            <div class="comment-card level-0">
+              <div class="comment-meta">
+                <span class="comment-author mod-author">u/karl_gerstner_fan [MOD]</span>
+                <span class="comment-time">3h ago</span>
+                <span class="comment-score">+1.4K PTS</span>
+                <span class="badge-mod">[VERIFIED_THEORIST]</span>
+              </div>
+              <div class="comment-text">
+                <p>
+                  Reyner Banham’s seminal 1955 essay <em>"The New Brutalism"</em> established three strict criteria:
+                  <br><strong>1. Memorability of Image</strong>
+                  <br><strong>2. Clear Exhibition of Structure</strong>
+                  <br><strong>3. Valuation of Materials "as found"</strong>
+                </p>
+                <p>
+                  In the context of the <strong>REDEFINE Tracks</strong>:
+                  <br>• <strong>1a. Neo-Brutalism</strong> values the physical 'button press' with <code>3px solid #000 + 6px 6px 0 #000</code>.
+                  <br>• <strong>1b. Cyber Brutalism</strong> exposes the terminal shell with <code>text-shadow: 0 0 8px #FF2200</code> and ASCII console dividers (<code>///</code>, <code>---</code>, <code>&gt;</code>).
+                  <br>• <strong>1c. Swiss Brutalism</strong> locks the composition to a disciplined 12-column CSS grid!
+                </p>
+              </div>
+              <div class="comment-actions">
+                <button class="comm-vote-btn">▲</button>
+                <span class="comm-pts">1420</span>
+                <button class="comm-vote-btn">▼</button>
+                <button class="comm-reply-btn">[REPLY]</button>
+                <button class="comm-collapse-btn">[COLLAPSE -]</button>
+              </div>
+
+              <!-- Nested Level 1 Reply -->
+              <div class="comment-card level-1">
+                <div class="comment-meta">
+                  <span class="comment-author op-author">u/arch_void [OP]</span>
+                  <span class="comment-time">2h ago</span>
+                  <span class="comment-score">+580 PTS</span>
+                </div>
+                <div class="comment-text">
+                  <p>
+                    Exactly what I needed! The electric green signal with <code>text-shadow: 0 0 8px [accent]</code> provides incredible contrast against the void canvas.
+                  </p>
+                </div>
+                <div class="comment-actions">
+                  <button class="comm-vote-btn">▲</button>
+                  <span class="comm-pts">580</span>
+                  <button class="comm-vote-btn">▼</button>
+                  <button class="comm-reply-btn">[REPLY]</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comment 2 -->
+            <div class="comment-card level-0">
+              <div class="comment-meta">
+                <span class="comment-author">u/acid_grid_smith</span>
+                <span class="comment-time">2h ago</span>
+                <span class="comment-score">+412 PTS</span>
+              </div>
+              <div class="comment-text">
+                <p>
+                  Poster #05 (Signal Degrade) illustrates the bridge between structural brutalism and early terminal culture. The intentional 0px border-radius and high-contrast duotone evoke classic print constraints.
+                </p>
+              </div>
+              <div class="comment-actions">
+                <button class="comm-vote-btn">▲</button>
+                <span class="comm-pts">412</span>
+                <button class="comm-vote-btn">▼</button>
+                <button class="comm-reply-btn">[REPLY]</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </article>
+
+      <!-- SECOND FEED POST -->
+      <article class="post-card secondary-post post-cyber">
+        <div class="post-header-bar">
+          <div class="post-origin-meta">
+            <span class="post-subreddit-badge">r/graphic_design</span>
+            <span class="divider-slash">///</span>
+            <span class="post-author">Posted by <strong>u/swiss_grid_master</strong></span>
+            <span class="post-timestamp">7h ago</span>
+            <span class="post-flair-badge">[1c_SWISS_SPEC]</span>
+          </div>
+          <span class="upvote-ratio">96% UPVOTED</span>
+        </div>
+        <div class="post-title-section">
+          <h2 class="post-secondary-title">ARCHIVE: REDEFINE Track 1c Swiss Brutalism CSS Grid Telemetry</h2>
+        </div>
+        <div class="post-body-text">
+          <p>
+            High-density vector breakdown analyzing the mathematical proportions of Basel school grid tension when subjected to extreme high-voltage green signal saturation.
+          </p>
+        </div>
+        <div class="code-spec-snippet">
+          <div class="snippet-header">REDEFINE_TRACK_1_BUILD_SPECS.JSON</div>
+          <pre><code>{
+  "1a_neo_brutalism": {
+    "border": "3px solid #000000",
+    "box_shadow": "6px 6px 0 #000000",
+    "palette": ["#FF2200", "#000000", "#FFFFFF"]
+  },
+  "1b_cyber_brutalism": {
+    "background": "#000000_TRUE_BLACK",
+    "text_shadow": "0 0 8px #FF2200",
+    "ascii_dividers": ["///", "---", ">"],
+    "type": "Space Mono, JetBrains Mono"
+  },
+  "1c_swiss_brutalism": {
+    "grid": "12_COLUMN_VISIBLE_GUTTERS",
+    "palette": "RED_BLACK_WHITE_ONLY"
+  }
+}</code></pre>
+        </div>
+        <div class="post-footer-bar">
+          <div class="vote-widget">
+            <button class="vote-btn">▲</button>
+            <span class="vote-score">9.4K</span>
+            <button class="vote-btn">▼</button>
+          </div>
+          <button class="post-action-btn"><span class="btn-glyph">[💬]</span> 89_REPLIES</button>
+          <button class="post-action-btn"><span class="btn-glyph">[⎘]</span> SHARE</button>
+        </div>
+      </article>
+
+      <!-- THIRD FEED POST: POLL -->
+      <article class="post-card secondary-post post-editorial">
+        <div class="post-header-bar">
+          <div class="post-origin-meta">
+            <span class="post-subreddit-badge">r/graphic_design</span>
+            <span class="divider-slash">///</span>
+            <span class="post-author">Posted by <strong>u/meta_critique</strong></span>
+            <span class="post-timestamp">11h ago</span>
+            <span class="post-flair-badge">[COMMUNITY_POLL]</span>
+          </div>
+          <span class="upvote-ratio">92% UPVOTED</span>
+        </div>
+        <div class="post-title-section">
+          <h2 class="post-secondary-title">POLL: Which REDEFINE Brutalism subtrack best captures the raw spirit of modern web design?</h2>
+        </div>
+        
+        <!-- Interactive Poll Widget -->
+        <div class="poll-container" id="community-poll-widget">
+          <div class="poll-option" data-option="1">
+            <div class="poll-bar-bg" style="width: 58%;"></div>
+            <div class="poll-option-content">
+              <span class="poll-label">[A] 1b. Cyber Brutalism (Terminal culture, glowing text-shadow, ASCII)</span>
+              <span class="poll-pct">58% (1,442 votes)</span>
+            </div>
+          </div>
+          <div class="poll-option" data-option="2">
+            <div class="poll-bar-bg" style="width: 27%;"></div>
+            <div class="poll-option-content">
+              <span class="poll-label">[B] 1c. Swiss Brutalism (Disciplined 12-col grid, red/black/white)</span>
+              <span class="poll-pct">27% (671 votes)</span>
+            </div>
+          </div>
+          <div class="poll-option" data-option="3">
+            <div class="poll-bar-bg" style="width: 15%;"></div>
+            <div class="poll-option-content">
+              <span class="poll-label">[C] 1a. Neo-Brutalism (Thick 3px black borders, 6px offset stamp shadows)</span>
+              <span class="poll-pct">15% (375 votes)</span>
+            </div>
+          </div>
+          <div class="poll-footer">
+            <span>2,488 TOTAL VOTES • REDEFINE DESIGNATHON ACTIVE</span>
+            <span class="poll-voted-msg" id="poll-msg">CLICK AN OPTION TO COMMIT VOTE</span>
+          </div>
+        </div>
+
+        <div class="post-footer-bar">
+          <div class="vote-widget">
+            <button class="vote-btn">▲</button>
+            <span class="vote-score">3.1K</span>
+            <button class="vote-btn">▼</button>
+          </div>
+          <button class="post-action-btn"><span class="btn-glyph">[💬]</span> 214_REPLIES</button>
+          <button class="post-action-btn"><span class="btn-glyph">[⎘]</span> SHARE</button>
+        </div>
+      </article>
+
+    </main>
+
+
+    <!-- 4. RIGHT SIDEBAR (COMMUNITY INFO & RULES) -->
+    <aside class="right-sidebar" id="right-sidebar">
+      <div class="sidebar-scroll-content">
+        
+        <!-- Top Card: Community Info Block -->
+        <div class="sidebar-card community-info-card">
+          <div class="community-banner">
+            <div class="banner-glitch-text">R/GRAPHIC_DESIGN</div>
+            <span class="banner-badge">REDEFINE // TRACK 1</span>
+          </div>
+          
+          <div class="community-header-main">
+            <div class="community-avatar-large">
+              <span>GD</span>
+            </div>
+            <div class="community-title-meta">
+              <h2 class="comm-card-title">r/graphic_design</h2>
+              <div class="comm-ascii-subtitle">/// 235K MEMBERS -- 4.6K ONLINE</div>
+            </div>
+          </div>
+
+          <p class="community-description">
+            The premier forum for graphic designers, typographers, and brutalist practitioners building a raw, technical, neon-green visual network.
+          </p>
+
+          <!-- Oversized Monospace Statistics Numbers -->
+          <div class="stats-grid-oversized">
+            <div class="stat-box">
+              <div class="stat-number">235,892</div>
+              <div class="stat-label">OPERATORS</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">4,618</div>
+              <div class="stat-label">ONLINE_NOW</div>
+            </div>
+            <div class="stat-box full-width-stat">
+              <div class="stat-number">RANK #12</div>
+              <div class="stat-label">GLOBAL_ART_&amp;_DESIGN</div>
+            </div>
+          </div>
+
+          <div class="ascii-divider-line">
+            <span>[=============================]</span>
+          </div>
+
+          <!-- Blocky Solid Red JOIN COMMUNITY Button -->
+          <button class="brutalist-btn btn-primary block-btn" id="join-community-btn">
+            <span class="join-icon">[+]</span>
+            <span class="join-text" id="join-status-text">JOIN COMMUNITY</span>
+          </button>
+          
+          <div class="comm-extra-meta">
+            <span>CREATED: JAN 25, 2008</span>
+            <span>REDEFINE PUBLIC ARCHIVE</span>
+          </div>
+        </div>
+
+        <!-- Section Divider -->
+        <div class="ascii-divider-line">
+          <span>/// COMMUNITY_RULES ---------&gt;</span>
+        </div>
+
+        <!-- Rules Expandable Card -->
+        <div class="sidebar-card rules-card">
+          <div class="card-title-bar">
+            <span class="ascii-icon">[!]</span>
+            <span class="card-title-text">COMMUNITY_RULES</span>
+          </div>
+          
+          <div class="rules-accordion" id="rules-accordion">
+            
+            <div class="rule-item">
+              <button class="rule-header" data-rule="1">
+                <span class="rule-num">[01]</span>
+                <span class="rule-title">NO JOB POSTS / COMMERCIAL SPAM</span>
+                <span class="rule-toggle">+</span>
+              </button>
+              <div class="rule-body">
+                <p>Commercial solicitations, hiring ads, and unapproved crypto/promotional schemes are banned on sight. Utilize r/forhire for employment inquiries.</p>
+              </div>
+            </div>
+
+            <div class="rule-item">
+              <button class="rule-header" data-rule="2">
+                <span class="rule-num">[02]</span>
+                <span class="rule-title">GRAPHIC DESIGN ONLY</span>
+                <span class="rule-toggle">+</span>
+              </button>
+              <div class="rule-body">
+                <p>Submissions must center on graphic design, typography, layout theory, visual identities, or poster arts. Pure fine art or memes belong elsewhere.</p>
+              </div>
+            </div>
+
+            <div class="rule-item">
+              <button class="rule-header" data-rule="3">
+                <span class="rule-num">[03]</span>
+                <span class="rule-title">CREDIT ORIGINAL ARTISTS</span>
+                <span class="rule-toggle">+</span>
+              </button>
+              <div class="rule-body">
+                <p>Always cite the original creator, studio, year, and medium in the post title or stickied comment. Uncredited reposts are purged.</p>
+              </div>
+            </div>
+
+            <div class="rule-item">
+              <button class="rule-header" data-rule="4">
+                <span class="rule-num">[04]</span>
+                <span class="rule-title">NO LOW-EFFORT AI SLOP</span>
+                <span class="rule-toggle">+</span>
+              </button>
+              <div class="rule-body">
+                <p>Raw human craft, intentional grid systems, and verified technical execution are mandatory. Synthetic generic imagery will be rejected.</p>
+              </div>
+            </div>
+
+            <div class="rule-item">
+              <button class="rule-header" data-rule="5">
+                <span class="rule-num">[05]</span>
+                <span class="rule-title">RAW CODE / ASSET SPECS REQUIRED</span>
+                <span class="rule-toggle">+</span>
+              </button>
+              <div class="rule-body">
+                <p>When sharing digital experiments, include color codes, font stacks, and layout grids to empower peer critique.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section Divider -->
+        <div class="ascii-divider-line">
+          <span>::: MODERATORS [===]</span>
+        </div>
+
+        <!-- Moderators Card -->
+        <div class="sidebar-card moderators-card">
+          <div class="card-title-bar">
+            <span class="ascii-icon">///</span>
+            <span class="card-title-text">MODERATORS_LIST</span>
+          </div>
+          <ul class="moderators-list">
+            <li class="mod-item">
+              <span class="mod-status">[ONLINE]</span>
+              <span class="mod-name">u/karl_gerstner_fan</span>
+            </li>
+            <li class="mod-item">
+              <span class="mod-status">[ONLINE]</span>
+              <span class="mod-name">u/béton_curator</span>
+            </li>
+            <li class="mod-item">
+              <span class="mod-status muted">[IDLE]</span>
+              <span class="mod-name">u/grid_system_mod</span>
+            </li>
+            <li class="mod-item">
+              <span class="mod-status muted">[IDLE]</span>
+              <span class="mod-name">u/anti_design_bot</span>
+            </li>
+          </ul>
+          <button class="brutalist-btn btn-secondary block-btn btn-sm" id="msg-mods-btn">
+            PING_MODS(sys_mail)
+          </button>
+        </div>
+
+        <div class="ascii-divider-line"><span>/// LIVE_NETWORK ---------&gt;</span></div>
+
+        <div class="sidebar-card network-pulse-card">
+          <div class="card-title-bar"><span class="ascii-icon">[::]</span><span class="card-title-text">NETWORK_PULSE</span></div>
+          <div class="pulse-row"><span>HOT_NOW</span><strong>842 POSTS</strong></div>
+          <div class="pulse-row"><span>COMMENTS_SEC</span><strong>126.4</strong></div>
+          <div class="pulse-row"><span>UPTIME</span><strong>99.98%</strong></div>
+          <div class="signal-bars" aria-label="Network signal strength"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="pulse-footer">NODE_07 // FEED_SYNCHRONIZED</div>
+        </div>
+
+        <!-- Footer Colophon -->
+        <div class="sidebar-colophon">
+          <div>REDEFINE DESIGNATHON // 2026</div>
+          <div>TRACK 1: BRUTALISM (1a / 1b / 1c)</div>
+          <div>BUILT WITH STRICT 0PX CONSTRAINTS</div>
+          <div>COLOR: #000000 / #1C0606 / #FF2200</div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+
+  <!-- 5. POSTER INSPECTION LIGHTBOX MODAL -->
+  <div class="brutalist-modal-backdrop" id="poster-lightbox-modal">
+    <div class="brutalist-modal-dialog">
+      <div class="modal-header-bar">
+        <div class="modal-title-left">
+          <span class="modal-glyph">[+]</span>
+          <span class="modal-title-text" id="lightbox-title">POSTER_SPEC_INSPECTOR</span>
+        </div>
+        <button class="modal-close-btn" id="close-lightbox-btn">[ ESC / CLOSE ✕ ]</button>
+      </div>
+
+      <div class="modal-body-layout">
+        <!-- Enlarged Poster Canvas Viewer -->
+        <div class="lightbox-viewer-stage" id="lightbox-stage">
+          <div class="lightbox-canvas-slot" id="lightbox-canvas-slot">
+            <!-- Cloned Poster content injected here dynamically -->
+          </div>
+        </div>
+
+        <!-- Poster Metadata & Telemetry Inspector -->
+        <div class="lightbox-telemetry-panel">
+          <div class="panel-section-header">/// ASSET_TELEMETRY</div>
+          
+          <div class="telemetry-row">
+            <span class="tel-label">NAME:</span>
+            <span class="tel-val" id="tel-name">BÉTON_BRUT.SPEC</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="tel-label">REDEFINE_TRACK:</span>
+            <span class="tel-val highlight-red">1b. CYBER BRUTALISM (RAW_1BIT)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="tel-label">DIMENSIONS:</span>
+            <span class="tel-val">2400 x 3200 PX (300 DPI)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="tel-label">COLOR_SPACE:</span>
+            <span class="tel-val highlight-red">1-BIT RAW RASTER / CMYK</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="tel-label">PRIMARY_ACCENT:</span>
+            <span class="tel-val">#00FF41 (ELECTRIC GREEN)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="tel-label">CANVAS_BASE:</span>
+            <span class="tel-val">#000000 (TRUE BLACK)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="tel-label">TYPEFACES:</span>
+            <span class="tel-val">SPACE MONO, JETBRAINS MONO, ARCHIVO BLACK</span>
+          </div>
+
+          <div class="ascii-divider-line">
+            <span>[=========================]</span>
+          </div>
+
+          <div class="lightbox-actions">
+            <button class="brutalist-btn btn-primary block-btn" id="download-spec-btn">
+              DOWNLOAD_VECTOR_SPEC (.SVG)
+            </button>
+            <button class="brutalist-btn btn-secondary block-btn" id="copy-hex-btn">
+              COPY_PALETTE_HEX
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 6. CREATE POST MODAL -->
+  <div class="brutalist-modal-backdrop" id="create-post-modal">
+    <div class="brutalist-modal-dialog create-modal">
+      <div class="modal-header-bar">
+        <div class="modal-title-left">
+          <span class="modal-glyph">[+]</span>
+          <span class="modal-title-text">NEW_SUBMISSION // r/graphic_design</span>
+        </div>
+        <button class="modal-close-btn" id="close-create-modal-btn">[ ✕ ]</button>
+      </div>
+
+      <div class="modal-form-content">
+        <div class="form-row">
+          <label for="new-post-type">SUBMISSION_FORMAT:</label>
+          <div class="format-pills">
+            <button class="format-pill active" data-type="text">[ ESSAY / TEXT ]</button>
+            <button class="format-pill" data-type="poster">[ POSTER_SPEC ]</button>
+            <button class="format-pill" data-type="poll">[ COMMUNITY_POLL ]</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="new-post-flair">SELECT_REDEFINE_FLAIR:</label>
+          <select id="new-post-flair" class="brutalist-select">
+            <option value="1b_CYBER_BRUTALISM">[1b_CYBER_BRUTALISM]</option>
+            <option value="1a_NEO_BRUTALISM">[1a_NEO_BRUTALISM]</option>
+            <option value="1c_SWISS_BRUTALISM">[1c_SWISS_BRUTALISM]</option>
+            <option value="ESSAY_INQUIRY">[ESSAY_INQUIRY]</option>
+            <option value="POSTER_CRITIQUE">[POSTER_CRITIQUE]</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="new-post-title">POST_TITLE:</label>
+          <input type="text" id="new-post-title" class="brutalist-input" placeholder="Enter concise, high-contrast post title..." required>
+        </div>
+
+        <div class="form-row">
+          <label for="new-post-body">BODY_ANALYSIS (MARKDOWN):</label>
+          <textarea id="new-post-body" class="brutalist-textarea" rows="6" placeholder="Document your thesis, grid specifications, or questions according to Track 1 rules..."></textarea>
+        </div>
+
+        <div class="form-actions-footer">
+          <span class="form-notice">BY SUBMITTING YOU AGREE TO STRICT 0PX CONSTRAINTS.</span>
+          <div class="btn-group">
+            <button class="brutalist-btn btn-secondary" id="cancel-create-btn">CANCEL</button>
+            <button class="brutalist-btn btn-primary" id="publish-post-btn">PUBLISH_TRANSMISSION</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Node -->
+  <div class="brutalist-toast" id="system-toast">
+    <span class="toast-code">[SYSTEM]</span>
+    <span class="toast-msg" id="toast-message">NOTIFICATION_TEXT</span>
+  </div>
+
+  <!-- Audio Synthesizer & App Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
