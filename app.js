@@ -600,6 +600,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const postTitleInput = document.getElementById('new-post-title');
   const postBodyInput = document.getElementById('new-post-body');
   const postFlairSelect = document.getElementById('new-post-flair');
+  const postImageInput = document.getElementById('new-post-image');
+  const postImagePreviewWrap = document.getElementById('new-post-image-preview-wrap');
+  const postImagePreview = document.getElementById('new-post-image-preview');
+  const removePostImageBtn = document.getElementById('remove-post-image-btn');
+  let selectedImageDataUrl = null;
+
+  function clearSelectedImage() {
+    selectedImageDataUrl = null;
+    if (postImageInput) postImageInput.value = '';
+    if (postImagePreview) postImagePreview.src = '';
+    if (postImagePreviewWrap) postImagePreviewWrap.hidden = true;
+  }
+
+  if (postImageInput) {
+    postImageInput.addEventListener('change', () => {
+      const file = postImageInput.files && postImageInput.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        showToast('ERROR: Selected file is not an image');
+        playThud();
+        clearSelectedImage();
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        selectedImageDataUrl = reader.result;
+        if (postImagePreview) postImagePreview.src = selectedImageDataUrl;
+        if (postImagePreviewWrap) postImagePreviewWrap.hidden = false;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (removePostImageBtn) {
+    removePostImageBtn.addEventListener('click', () => {
+      clearSelectedImage();
+      playClick();
+    });
+  }
 
   if (openCreateBtn && createModal) {
     openCreateBtn.addEventListener('click', () => {
@@ -610,6 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closeCreate() {
     if (createModal) createModal.classList.remove('open');
+    clearSelectedImage();
     playClick();
   }
 
@@ -660,6 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="post-body-text">
             <p>${escapeHtml(body || 'No transmission body provided.')}</p>
+            ${selectedImageDataUrl ? `<img src="${selectedImageDataUrl}" alt="Post attachment">` : ''}
           </div>
           <div class="post-footer-bar">
             <div class="vote-widget">
@@ -675,11 +716,12 @@ document.addEventListener('DOMContentLoaded', () => {
         feed.insertBefore(newPost, featuredCard);
         const postId = `post-${Date.now()}`;
         newPost.dataset.postId = postId;
-        state.posts.unshift({ id: postId, title, body, flair, community: 'r/reddit', author: state.user.username, createdAt: new Date().toISOString(), score: 1 });
+        state.posts.unshift({ id: postId, title, body, flair, image: selectedImageDataUrl, community: 'r/reddit', author: state.user.username, createdAt: new Date().toISOString(), score: 1 });
         persist();
         setupVoteWidget(newPost.querySelector('.vote-widget'), 1, postId);
         postTitleInput.value = '';
         postBodyInput.value = '';
+        clearSelectedImage();
         closeCreate();
         showToast('BROADCAST_SUCCESS: New transmission submitted to feed');
         playSuccess();
@@ -698,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div class="post-header-bar"><div class="post-origin-meta"><span class="post-subreddit-badge">${escapeHtml(post.community)}</span><span class="divider-slash">///</span><span class="post-author">Posted by <strong>u/${escapeHtml(post.author)}</strong> [OP]</span><span class="post-timestamp">${new Date(post.createdAt).toLocaleString()}</span><span class="post-flair-badge">[${escapeHtml(post.flair)}]</span></div><div class="post-header-actions"><span class="upvote-ratio">LOCAL_TRANSMISSION</span><div class="post-options-wrap"><button class="header-menu-btn" title="Post Options" aria-label="Open post options" aria-expanded="false">•••</button><div class="post-options-menu" role="menu"><button class="remove-post-btn" type="button" role="menuitem">[X] REMOVE_POST</button></div></div></div></div>
         <div class="post-title-section"><h2 class="post-secondary-title">${escapeHtml(post.title)}</h2></div>
-        <div class="post-body-text"><p>${escapeHtml(post.body || 'No transmission body provided.')}</p></div>
+        <div class="post-body-text"><p>${escapeHtml(post.body || 'No transmission body provided.')}</p>${post.image ? `<img src="${post.image}" alt="Post attachment">` : ''}</div>
         <div class="post-footer-bar"><div class="vote-widget"><button class="vote-btn upvote">▲</button><span class="vote-score">${post.score}</span><button class="vote-btn downvote">▼</button></div><button class="post-action-btn"><span class="btn-glyph">[💬]</span>0_REPLIES</button><button class="post-action-btn"><span class="btn-glyph">[⎘]</span>SHARE</button></div>`;
       feed.insertBefore(card, featuredCard);
       setupVoteWidget(card.querySelector('.vote-widget'), post.score, post.id);
