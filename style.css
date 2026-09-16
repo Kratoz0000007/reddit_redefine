@@ -3099,6 +3099,19 @@ body::after {
   text-shadow: none;
 }
 
+.reddit-logo-mark {
+  width: 31px;
+  height: 31px;
+  display: block;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: grayscale(1) brightness(0) invert(1) drop-shadow(2px 0 var(--neo-cyan)) drop-shadow(-2px 0 var(--neo-magenta));
+}
+
+.logo-group:hover .reddit-logo-mark {
+  filter: grayscale(1) brightness(0) invert(1) drop-shadow(3px 0 var(--neo-cyan)) drop-shadow(-3px 0 var(--neo-magenta));
+}
+
 .logo-avatar-box .avatar-glyph::before,
 .logo-avatar-box .avatar-glyph::after {
   content: "";

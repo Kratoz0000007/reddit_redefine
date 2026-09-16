@@ -794,9 +794,22 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('POST_REMOVED: Transmission deleted from local feed');
       }, 180);
     });
+    if (removeButton) removeButton.dataset.bound = 'true';
   });
 
   document.addEventListener('click', event => {
+    const dynamicRemove = event.target.closest?.('.remove-post-btn:not([data-bound])');
+    if (dynamicRemove) {
+      const post = dynamicRemove.closest('.post-card');
+      if (post && window.confirm('Remove this post from the feed?')) {
+        post.classList.add('post-removing');
+        window.setTimeout(() => {
+          post.remove();
+          showToast('POST_REMOVED: Transmission deleted from local feed');
+        }, 180);
+      }
+      return;
+    }
     document.querySelectorAll('.post-options-menu.open').forEach(menu => {
       if (!menu.parentElement.contains(event.target)) {
         menu.classList.remove('open');
@@ -820,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function routePost(title, community, author, score, replies, flair) {
-    return `<article class="post-card route-post"><div class="post-header-bar"><div class="post-origin-meta"><span class="post-subreddit-badge">${community}</span><span class="divider-slash">///</span><span class="post-author">USER://${author}</span><span class="post-timestamp">14M AGO</span><span class="post-flair-badge">[${flair || 'DISCUSSION'}]</span></div><span class="upvote-ratio">LIVE_SIGNAL</span></div><div class="post-title-section"><h2 class="post-secondary-title glitch-text" data-text="${title}">${title}</h2><div class="post-sub-specs"><span>POST_ID://48291</span><span>STATUS://SYNCED</span></div></div><div class="post-body-text"><p>Transmission received from the community network. Read the full thread, inspect the responses, and add your own signal to the discussion.</p></div><div class="post-footer-bar"><div class="vote-widget"><button class="vote-btn upvote" aria-label="Upvote">▲</button><span class="vote-score">${score}</span><button class="vote-btn downvote" aria-label="Downvote">▼</button></div><button class="post-action-btn route-detail-btn"><span class="btn-glyph">[💬]</span>${replies}_REPLIES</button><button class="post-action-btn"><span class="btn-glyph">[⎘]</span>SHARE</button></div></article>`;
+    return `<article class="post-card route-post"><div class="post-header-bar"><div class="post-origin-meta"><span class="post-subreddit-badge">${community}</span><span class="divider-slash">///</span><span class="post-author">USER://${author}</span><span class="post-timestamp">14M AGO</span><span class="post-flair-badge">[${flair || 'DISCUSSION'}]</span></div><div class="post-header-actions"><span class="upvote-ratio">LIVE_SIGNAL</span><div class="post-options-wrap"><button class="header-menu-btn" title="Post Options" aria-label="Open post options" aria-expanded="false">•••</button><div class="post-options-menu" role="menu"><button class="remove-post-btn" type="button" role="menuitem">[X] REMOVE_POST</button></div></div></div></div><div class="post-title-section"><h2 class="post-secondary-title glitch-text" data-text="${title}">${title}</h2><div class="post-sub-specs"><span>POST_ID://48291</span><span>STATUS://SYNCED</span></div></div><div class="post-body-text"><p>Transmission received from the community network. Read the full thread, inspect the responses, and add your own signal to the discussion.</p></div><div class="post-footer-bar"><div class="vote-widget"><button class="vote-btn upvote" aria-label="Upvote">▲</button><span class="vote-score">${score}</span><button class="vote-btn downvote" aria-label="Downvote">▼</button></div><button class="post-action-btn route-detail-btn"><span class="btn-glyph">[💬]</span>${replies}_REPLIES</button><button class="post-action-btn"><span class="btn-glyph">[⎘]</span>SHARE</button></div></article>`;
   }
 
   function renderRoute(route) {
