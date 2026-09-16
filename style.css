@@ -618,6 +618,26 @@ body {
   font-weight: 900;
 }
 
+.community-icon {
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--neo-green);
+  text-shadow: 1px 0 var(--neo-cyan), -1px 0 var(--neo-magenta), 0 0 7px rgba(0, 255, 65, 0.7);
+  transition: transform 100ms steps(2, end), color 100ms steps(2, end), background 100ms steps(2, end);
+}
+
+.community-sq-avatar.red-fill.community-icon {
+  color: #000;
+  text-shadow: none;
+}
+
+.community-row:hover .community-icon {
+  transform: translate(-1px, -1px) scale(1.12);
+  background: var(--neo-lime);
+  color: #000;
+  text-shadow: none;
+}
+
 .comm-info {
   flex: 1;
   display: flex;
